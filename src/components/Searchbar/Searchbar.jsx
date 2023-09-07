@@ -3,16 +3,16 @@ import { SearchForminput } from "./Searchbar.styled"
 import { SearchForm } from "./Searchbar.styled"
 import { Searchbar } from "./Searchbar.styled"
 import { SearchFormbutton } from "./Searchbar.styled"
-export const SearchbarHead = () =>{
+export const SearchbarHead = ({onSubmit}) =>{
     return (
-    <Searchbar class="searchbar">
-  <SearchForm class="form">
-    <SearchFormbutton type="submit" class="button">
-      <ButtonLabel class="button-label">Search</ButtonLabel>
+    <Searchbar >
+  <SearchForm >
+    <SearchFormbutton type="submit"  >
+      <ButtonLabel onSubmit={onSubmit}>Search</ButtonLabel>
     </SearchFormbutton>
 
     <SearchForminput
-      class="input"
+    
       type="text"
       autocomplete="off"
       autofocus
