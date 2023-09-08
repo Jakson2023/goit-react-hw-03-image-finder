@@ -1,25 +1,30 @@
-import { ButtonLabel } from "./Searchbar.styled"
-import { SearchForminput } from "./Searchbar.styled"
-import { SearchForm } from "./Searchbar.styled"
-import { Searchbar } from "./Searchbar.styled"
-import { SearchFormbutton } from "./Searchbar.styled"
-export const SearchbarHead = ({onSubmit}) =>{
-    return (
-    <Searchbar >
-  <SearchForm >
-    <SearchFormbutton type="submit"  >
-      <ButtonLabel onSubmit={onSubmit}>Search</ButtonLabel>
-    </SearchFormbutton>
+import {
+  ButtonLabel,
+  SearchForminput,
+  SearchForm,
+  Searchbar,
+  SearchFormbutton,
+} from './Searchbar.styled';
 
-    <SearchForminput
+export const SearchbarHead = ({ onSubmit }) => {
+  const handleSubmit = e => {
+    e.preventDefault();
+    const query = e.target.elements.query.value; 
     
-      type="text"
-      autocomplete="off"
-      autofocus
-      placeholder="Search images and photos"
-    />
-  </SearchForm>
-</Searchbar>
-
-    )
-}
+    onSubmit(query);
+  };
+  return (
+    <Searchbar>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormbutton type="submit">
+          <ButtonLabel>Search</ButtonLabel>
+        </SearchFormbutton>
+        <SearchForminput
+          type="text"
+          name="query"
+          placeholder="Search images and photos"
+        />
+      </SearchForm>
+    </Searchbar>
+  );
+};
