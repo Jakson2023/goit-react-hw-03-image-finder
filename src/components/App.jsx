@@ -4,11 +4,13 @@ import { SearchbarHead } from './Searchbar/Searchbar';
 import { serviceReq } from './Api/Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { LoadMore } from './Button/Button';
+import { ModalWindow } from './Modal/Modal';
 export class App extends Component {
   state = {
     images: [],
     page: 1,
     query: '',
+    isModalOpen: false,
   };
 
   handleSubmit = search => {
@@ -41,12 +43,24 @@ export class App extends Component {
     }
   }
 
+  toggleModal = (key) => {
+    console.log(key);
+    this.setState((prevState) => ({
+      isModalOpen: !prevState.isModalOpen,
+    }));
+  };
+
+
+
+
   render() {
+    
     return (
       <AppGallery>
         <SearchbarHead onSubmit={this.handleSubmit} />
-        <ImageGallery img={this.state.images} />
+        <ImageGallery img={this.state.images} onClick={this.toggleModal} />
         {this.state.images.length > 0 && <LoadMore onClick={this.loadMore} />}
+        <ModalWindow onToggle={this.toggleModal} modalState={this.state.isModalOpen} img={this.state.images}/>
       </AppGallery>
     );
   }
