@@ -5,19 +5,21 @@ import {
   Searchbar,
   SearchFormbutton,
 } from './Searchbar.styled';
+import { FaSearch } from 'react-icons/fa';
 
 export const SearchbarHead = ({ onSubmit }) => {
   const handleSubmit = e => {
     e.preventDefault();
-    const query = e.target.elements.query.value; 
-    
+    const query = e.target.elements.query.value;
     onSubmit(query);
   };
   return (
     <Searchbar>
       <SearchForm onSubmit={handleSubmit}>
         <SearchFormbutton type="submit">
-          <ButtonLabel>Search</ButtonLabel>
+          {' '}
+          <FaSearch />
+          <ButtonLabel> </ButtonLabel>
         </SearchFormbutton>
         <SearchForminput
           type="text"

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SearchForm = styled.form`
   display: flex;
-  align-items: center;
+  align-items: baseline;
   width: 100%;
   max-width: 600px;
   background-color: #fff;
@@ -29,11 +29,10 @@ export const Searchbar = styled.header`
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `;
 export const SearchFormbutton = styled.button`
-  display: inline-block;
+  display: flex;
   width: 48px;
   height: 48px;
   border: 0;
-  background-image: url('https://image.flaticon.com/icons/svg/149/149852.svg');
   background-size: 40%;
   background-repeat: no-repeat;
   background-position: center;
@@ -41,6 +40,11 @@ export const SearchFormbutton = styled.button`
   transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   outline: none;
+  &:hover {
+    opacity: 1;
+  }
+  align-items: center;
+  justify-content: center;
 `;
 
 export const SearchForminput = styled.input`
@@ -52,6 +56,10 @@ export const SearchForminput = styled.input`
   outline: none;
   padding-left: 4px;
   padding-right: 4px;
+  ::placeholder {
+    font: inherit;
+    font-size: 18px;
+  }
 `;
 
 export const ButtonLabel = styled.span`

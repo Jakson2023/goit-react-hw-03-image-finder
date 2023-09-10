@@ -5,12 +5,16 @@ import { serviceReq } from './Api/Api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { LoadMore } from './Button/Button';
 import { ModalWindow } from './Modal/Modal';
+import { Loader } from './Loader/Loader';
+
 export class App extends Component {
   state = {
+    loading: false,
     images: [],
     page: 1,
     query: '',
     isModalOpen: false,
+    end: true,
   };
 
   handleSubmit = search => {
@@ -26,17 +30,26 @@ export class App extends Component {
   async componentDidUpdate(prevProps, prevState) {
     const { query } = this.state;
     const { page } = this.state;
+
     if (prevState.query !== query || prevState.page !== page) {
       try {
+        this.setState({ loading: true });
         const imageData = await serviceReq(query, page);
-        if (imageData.hits.length / 12 < 1 && imageData.totalHits !== page * 12) {
-          alert('Eror');
+        if (
+          imageData.hits.length / 12 < 1 &&
+          imageData.totalHits !== page * 12
+        ) {
+          this.setState({ end: false });
+          alert('The last page will be loaded!');
         }
         this.setState(prevState => ({
           images: prevState.images.concat(imageData.hits),
         }));
       } catch (error) {
+        this.setState({ end: true });
         console.error('Error fetching images:', error);
+      } finally {
+        this.setState({ loading: false });
       }
     }
   }
@@ -47,13 +60,28 @@ export class App extends Component {
       key: setImage,
     }));
   };
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyPress);
+  }
+  handleKeyPress = event => {
+    if (event.key === 'Escape') {
+      this.setState({ isModalOpen: false });
+    }
+  };
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyPress);
+  }
 
   render() {
     return (
       <AppGallery>
         <SearchbarHead onSubmit={this.handleSubmit} />
         <ImageGallery img={this.state.images} onClick={this.toggleModal} />
-        {this.state.images.length > 0 && <LoadMore onClick={this.loadMore} />}
+        {this.state.images.length > 0 && this.state.end && (
+          <LoadMore onClick={this.loadMore} />
+        )}
+        {this.state.loading && <Loader />}
         <ModalWindow
           onToggle={this.toggleModal}
           modalState={this.state.isModalOpen}
