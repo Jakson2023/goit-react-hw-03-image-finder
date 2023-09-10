@@ -14,7 +14,6 @@ export class App extends Component {
   };
 
   handleSubmit = search => {
-    console.log(search);
     this.setState({ query: search, images: [], page: 1 });
   };
 
@@ -29,13 +28,12 @@ export class App extends Component {
     const { page } = this.state;
     if (prevState.query !== query || prevState.page !== page) {
       try {
-        const req = await serviceReq(query, page);
-        console.log(req);
-        if((req.hits.length/12) < 1 && req.totalHits !== page*12){
-          alert("Eror")
+        const imageData = await serviceReq(query, page);
+        if (imageData.hits.length / 12 < 1 && imageData.totalHits !== page * 12) {
+          alert('Eror');
         }
         this.setState(prevState => ({
-          images: prevState.images.concat(req.hits),
+          images: prevState.images.concat(imageData.hits),
         }));
       } catch (error) {
         console.error('Error fetching images:', error);
@@ -43,24 +41,24 @@ export class App extends Component {
     }
   }
 
-  toggleModal = (key) => {
-    console.log(key);
-    this.setState((prevState) => ({
+  toggleModal = setImage => {
+    this.setState(prevState => ({
       isModalOpen: !prevState.isModalOpen,
+      key: setImage,
     }));
   };
 
-
-
-
   render() {
-    
     return (
       <AppGallery>
         <SearchbarHead onSubmit={this.handleSubmit} />
         <ImageGallery img={this.state.images} onClick={this.toggleModal} />
         {this.state.images.length > 0 && <LoadMore onClick={this.loadMore} />}
-        <ModalWindow onToggle={this.toggleModal} modalState={this.state.isModalOpen} img={this.state.images}/>
+        <ModalWindow
+          onToggle={this.toggleModal}
+          modalState={this.state.isModalOpen}
+          modalImage={this.state.key}
+        />
       </AppGallery>
     );
   }
