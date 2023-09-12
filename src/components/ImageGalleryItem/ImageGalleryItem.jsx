@@ -1,13 +1,13 @@
 import { ImgGalleryItem, GalleryImg } from './ImageGalleryItem.styled';
 
-export const GalleryItem = ({ imgProps, onClick }) => {
+export const GalleryItem = ({ imgWeb,imgLarge, onClick }) => {
   return (
     <ImgGalleryItem className="gallery-item">
       <GalleryImg
-        src={imgProps.webformatURL}
+        src={imgWeb}
         alt=""
         onClick={() => {
-          onClick(imgProps.largeImageURL);
+          onClick(imgLarge);
         }}
       />
     </ImgGalleryItem>

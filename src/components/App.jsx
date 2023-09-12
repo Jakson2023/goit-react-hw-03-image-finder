@@ -1,7 +1,7 @@
 import { AppGallery } from './App.styled';
 import { Component } from 'react';
 import { SearchbarHead } from './Searchbar/Searchbar';
-import { serviceReq } from './Api/Api';
+import { serviceReq } from '../api/api';
 import { ImageGallery } from './ImageGallery/ImageGallery';
 import { LoadMore } from './Button/Button';
 import { ModalWindow } from './Modal/Modal';
@@ -28,13 +28,18 @@ export class App extends Component {
   };
 
   async componentDidUpdate(prevProps, prevState) {
-    const { query } = this.state;
-    const { page } = this.state;
+    const { query, page } = this.state;
 
     if (prevState.query !== query || prevState.page !== page) {
       try {
         this.setState({ loading: true });
         const imageData = await serviceReq(query, page);
+        const imagesOnly = imageData.hits.map(
+          ({ webformatURL, largeImageURL, id }) => {
+            return { webformatURL, largeImageURL, id };
+          }
+        );
+
         if (
           imageData.hits.length / 12 < 1 &&
           imageData.totalHits !== page * 12
@@ -42,8 +47,9 @@ export class App extends Component {
           this.setState({ end: false });
           alert('The last page will be loaded!');
         }
+
         this.setState(prevState => ({
-          images: prevState.images.concat(imageData.hits),
+          images: [...prevState.images, ...imagesOnly],
         }));
       } catch (error) {
         this.setState({ end: true });
@@ -60,6 +66,7 @@ export class App extends Component {
       key: setImage,
     }));
   };
+
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyPress);
   }
