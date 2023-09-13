@@ -15,10 +15,19 @@ export class App extends Component {
     query: '',
     isModalOpen: false,
     end: true,
+    modalImg: '',
   };
 
   handleSubmit = search => {
     this.setState({ query: search, images: [], page: 1 });
+  };
+
+  toggleModal = modalImage => {
+    console.log(modalImage);
+    this.setState(prevState => ({
+      isModalOpen: !prevState.isModalOpen,
+      modalImg: modalImage,
+    }));
   };
 
   loadMore = () => {
@@ -60,26 +69,6 @@ export class App extends Component {
     }
   }
 
-  toggleModal = setImage => {
-    this.setState(prevState => ({
-      isModalOpen: !prevState.isModalOpen,
-      key: setImage,
-    }));
-  };
-
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyPress);
-  }
-  handleKeyPress = event => {
-    if (event.key === 'Escape') {
-      this.setState({ isModalOpen: false });
-    }
-  };
-
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyPress);
-  }
-
   render() {
     return (
       <AppGallery>
@@ -89,11 +78,12 @@ export class App extends Component {
           <LoadMore onClick={this.loadMore} />
         )}
         {this.state.loading && <Loader />}
-        <ModalWindow
-          onToggle={this.toggleModal}
-          modalState={this.state.isModalOpen}
-          modalImage={this.state.key}
-        />
+        {this.state.isModalOpen && (
+          <ModalWindow
+            onClick={this.toggleModal}
+            modalImg={this.state.modalImg}
+          />
+        )}
       </AppGallery>
     );
   }
